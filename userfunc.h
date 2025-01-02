@@ -89,23 +89,53 @@ string stripMessage(string msg) {
 	return result;
 }
 
-void GrowtopiaBot::onLoginRequested()
-{
-	cout << "Logging on..." << endl;
-	string token;
-	if (!login_user && !login_token) {
-		token = "";
-	} else {
-		token = "\nuser|" + std::to_string(login_user) + "\ntoken|" + std::to_string(login_token);
-	}
-	string ver = gameVersion;
-	string hash = std::to_string((unsigned int)rand());
-	string hash2 = std::to_string((unsigned int)rand());
-	string packet = "tankIDName|" + uname + "\ntankIDPass|" + upass + "\nrequestedName|SmileZero\nf|1\nprotocol|84\ngame_version|" + ver + "\nfz|5367464\nlmode|0\ncbits|0\nplayer_age|18\nGDPR|1\nhash2|" + hash2 + "\nmeta|" + generateMeta() + "\nfhash|-716928004\nrid|" + generateRid() + "\nplatformID|0\ndeviceVersion|0\ncountry|us\nhash|" + hash + "\nmac|" + generateMac() + "\nwk|" + generateRid() + "\nzf|-496303939" + token;
-	cout << packet;
-	SendPacket(2, "tankIDName|" + uname + "\ntankIDPass|" + upass + "\nrequestedName|SmileZero\nf|1\nprotocol|84\ngame_version|" + ver + "\nfz|5367464\nlmode|0\ncbits|0\nplayer_age|18\nGDPR|1\nhash2|" + hash2 + "\nmeta|" + generateMeta() + "\nfhash|-716928004\nrid|" + generateRid() + "\nplatformID|0\ndeviceVersion|0\ncountry|us\nhash|" + hash + "\nmac|" + generateMac() + "\nwk|" + generateRid() + "\nzf|-496303939" + token, peer);
+void GrowtopiaBot::onLoginRequested() {
+    cout << "Logging on with protocol 212..." << endl;
+    
+    // Membuat paket login pertama
+    string loginPacket1 = 
+        "protocol|212\n"
+        "ltoken|X3Rva2VuPWRHRnVhMGxFVG1GdFpYeENUMEpUVVZWSlUwZ0tkR0Z1YTBsRVVHRnpjM3d4TWpNME5UWTNPQXB5WlhGMVpYTjBaV1JPWVcxbGZBcG1mREVLY0hKdmRHOWpiMng4TWpFeUNtZGhiV1ZmZG1WeWMybHZibncxTGpBeUNtTmlhWFJ6ZkRFd01qUUtjR3hoZVdWeVgyRm5aWHd5TkFwSFJGQlNmRElLWTJGMFpXZHZjbmw4ZDI5MFpGOTNiM0pzWkFwMGIzUmhiRkJzWVhsMGFXMWxmREFLYTJ4MmZFWXlOelZDUTBOR1JqTTBNRGxDT0VRM09EVTRSakl6TWpoRU5qTkJNVE0yQ21kcFpIeGhNMk5sTmpnM1l5MWhOVEExTFRReFpqZ3RZak5rT0MxaE9UUTJNMll6TTJZek9UQUtkSEo4TkRNeU1ncHRaWFJoZkVsdVptbHVhWFI1VUZOZmRsQjBVV05sVUd0WWMycHRhVVJSVHdwbWFHRnphSHd0TnpFMk9USTRNREEwQ25KcFpId3dNakpCUXpFMk5rRTRNa0kwTWpVNE1EWXpNemhGTjBJeE4wTXlRVVpCTWdwd2JHRjBabTl5YlVsRWZEUUtaR1YyYVdObFZtVnljMmx2Ym53d0NtTnZkVzUwY25sOGFXUUthR0Z6YUh3eE1qYzFNVEkxTWpJMENtMWhZM3d3TWpvd01Eb3dNRG93TURvd01Eb3dNQXAzYTN4T1QwNUZNQW89Jmdyb3dJZD1CT0JTUVVJU0gmcGFzc3dvcmQ9MTIzNDU2Nzg=\n"
+        "platformID|4\n";
+    
+    // Mengirim paket pertama
+    SendPacket(2, loginPacket1, peer);
 
-	currentWorld = "";
+    // Membuat paket login kedua
+    string loginPacket2 = 
+        "tankIDName|BOBSQUISH\n"
+        "tankIDPass|12345678\n"
+        "requestedName|\n"
+        "f|1\n"
+        "protocol|212\n"
+        "game_version|5.02\n"
+        "cbits|1024\n"
+        "player_age|24\n"
+        "GDPR|2\n"
+        "category|wotd_world\n"
+        "totalPlaytime|0\n"
+        "klv|F275BCCFF3409B8D7858F2328D63A136\n"
+        "gid|a3ce687c-a505-41f8-b3d8-a9463f33f390\n"
+        "tr|4322\n"
+        "meta|InfinityPS_vPtQcePkXsjmiDQO\n"
+        "fhash|-716928004\n"
+        "rid|022AC166A82B425806338E7B17C2AFA2\n"
+        "platformID|4\n"
+        "deviceVersion|0\n"
+        "country|id\n"
+        "hash|1275125224\n"
+        "mac|02:00:00:00:00:00\n"
+        "wk|NONE0\n"
+        "lmode|1\n"
+        "user|288116393\n"
+        "UUIDToken|-1\n"
+        "doorID|0\n"
+        "aat|2\n";
+    
+    // Mengirim paket kedua
+    SendPacket(2, loginPacket2, peer);
+
+    currentWorld = "";
 }
 
 void GrowtopiaBot::packet_type3(string text)
