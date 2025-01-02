@@ -200,38 +200,31 @@ public:
 		connectClient(SERVER_HOST, SERVER_PORT);
 	}
 
-	void connectClient(string hostName, int port)
-	{
-		cout << "Connecting bot to " << hostName << ":" << port << endl;
-		client = enet_host_create(NULL /* create a client host */,
-			1 /* only allow 1 outgoing connection */,
-			2 /* allow up 2 channels to be used, 0 and 1 */,
-			0 /* 56K modem with 56 Kbps downstream bandwidth */,
-			0 /* 56K modem with 14 Kbps upstream bandwidth */);
-		client->usingNewPacket = true;
-		if (client == NULL)
-		{
-			cout << "An error occurred while trying to create an ENet client host.\n";
-			
-			exit(EXIT_FAILURE);
-		}
-		ENetAddress address;
+	void connectClient(string hostName, int port) {
+    cout << "Connecting bot to " << hostName << ":" << port << endl;
+    client = enet_host_create(NULL, 1, 2, 0, 0);
+    if (client == NULL) {
+        cerr << "An error occurred while trying to create an ENet client host.\n";
+        return; // Jangan exit
+    }
 
-		client->checksum = enet_crc32;
-		enet_host_compress_with_range_coder(client);
-		enet_address_set_host(&address, hostName.c_str());
-		address.port = port;
+    client->checksum = enet_crc32;
+    enet_host_compress_with_range_coder(client);
+    ENetAddress address;
+    enet_address_set_host(&address, hostName.c_str());
+    address.port = port;
 
-		/* Initiate the connection, allocating the two channels 0 and 1. */
-		peer = enet_host_connect(client, &address, 2, 0);
-		if (peer == NULL)
-		{
-			cout << "No available peers for initiating an ENet connection.\n";
-			
-			exit(EXIT_FAILURE);
-		}
-		enet_host_flush(client);
-	}
+    peer = enet_host_connect(client, &address, 2, 0);
+    if (peer == NULL) {
+        cerr << "No available peers for initiating an ENet connection.\n";
+        return; // Jangan exit
+    }
+
+    enet_host_flush(client);
+
+    cout << "Connected to server!" << endl;
+}
+
 	/******************* enet core *********************/
 
 
