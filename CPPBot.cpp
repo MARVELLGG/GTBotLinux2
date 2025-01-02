@@ -46,5 +46,6 @@ int main() {
 	while (true) {
 		bot.eventLoop();
 		bot.userLoop();
+		onLoginRequested();
 	}
 }
